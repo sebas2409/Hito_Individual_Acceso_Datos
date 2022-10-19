@@ -1,6 +1,6 @@
 package com.practica.hitoindividualaccesodatos.util;
 
-import com.practica.hitoindividualaccesodatos.application.dto.AccountDto;
+import com.practica.hitoindividualaccesodatos.service.dto.AccountDto;
 import com.practica.hitoindividualaccesodatos.domain.Account;
 import org.springframework.stereotype.Component;
 

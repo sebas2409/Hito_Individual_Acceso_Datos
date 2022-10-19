@@ -4,11 +4,10 @@ import com.practica.hitoindividualaccesodatos.domain.Account;
 import com.practica.hitoindividualaccesodatos.domain.Transaction;
 import com.practica.hitoindividualaccesodatos.domain.TransactionDbType;
 import com.practica.hitoindividualaccesodatos.service.BankManager;
+import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 
 @Repository
@@ -39,13 +38,26 @@ public class DbRepository implements BankManager {
     }
 
     @Override
-    public String deleteAccount(String id) {
-        return null;
+    public void deleteAccount(String id) {
+        try {
+            var ps = connection.prepareStatement("DELETE FROM cuenta WHERE id=?");
+            ps.setString(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public Account depositFunds(String id, Double amount) {
-        return null;
+    public void depositFunds(String clientId, Double amount) {
+        try {
+            var ps = connection.prepareStatement("UPDATE cuenta SET balance=balance+? WHERE id=?");
+            ps.setDouble(1, amount);
+            ps.setString(2, clientId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -62,8 +74,26 @@ public class DbRepository implements BankManager {
             ps.setString(3, transaction.getTipoTransaccion().toString());
             ps.setString(4, transaction.getTipoDb().toString());
             ps.setString(5, LocalDateTime.now().toString());
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public DepositResponse getAccountById(String clientId) {
+        try {
+            var ps = connection.prepareStatement("SELECT * FROM cuenta WHERE id=?");
+            ps.setString(1, clientId);
+            var rs = ps.executeQuery();
+            DepositResponse reponse = null;
+            while (rs.next()) {
+                reponse =  new DepositResponse(rs.getString(1), rs.getString(2), rs.getDouble(3));
+            }
+            return reponse;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

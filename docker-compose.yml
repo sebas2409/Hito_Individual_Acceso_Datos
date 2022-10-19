@@ -1,8 +1,9 @@
 version: '3.8'
 services:
-  db:
+  postgres:
     image: postgres:latest
     restart: always
+    container_name: postgres
     environment:
       POSTGRES_USER: 'root'
       POSTGRES_PASSWORD: root
@@ -10,6 +11,20 @@ services:
       - '5432:5432'
     volumes:
       - db:/var/lib/postgresql/data
+  mysql:
+    image: mysql:latest
+    restart: always
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
 volumes:
   db:
+    driver: local
+  mysql_data:
     driver: local

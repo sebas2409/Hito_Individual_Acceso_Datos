@@ -4,9 +4,12 @@ import com.practica.hitoindividualaccesodatos.domain.Account;
 import com.practica.hitoindividualaccesodatos.domain.Transaction;
 import com.practica.hitoindividualaccesodatos.domain.TransactionDbType;
 import com.practica.hitoindividualaccesodatos.domain.TransactionType;
+import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
+import com.practica.hitoindividualaccesodatos.service.dto.DespositDto;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -20,7 +23,6 @@ public class BankServices {
 
     public void createAccount(Account account) {
         try {
-
             var uuid = UUID.randomUUID().toString();
             bankManager.checkDb(TransactionDbType.MYSQL);
             bankManager.createAccount(account);
@@ -40,6 +42,20 @@ public class BankServices {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public DepositResponse depositFunds(DespositDto depositDto) {
+        try {
+            bankManager.checkDb(depositDto.dbType());
+            bankManager.depositFunds(depositDto.clientId(), depositDto.amount());
+            bankManager.createTransaction(new Transaction(UUID.randomUUID().toString(),
+                    depositDto.clientId(),
+                    TransactionType.INGRESAR,
+                    depositDto.dbType(),
+                    LocalDateTime.now()));
+            return bankManager.getAccountById(depositDto.clientId());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

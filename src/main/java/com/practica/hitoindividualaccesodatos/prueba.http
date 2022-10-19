@@ -1,7 +1,18 @@
+### Crear cuenta
 POST localhost:8080/create
 Content-Type: application/json
 
 {
   "nombre": "Victor Sanchez Grande",
   "balance": 1000
+}
+
+### Depositar fondos
+POST localhost:8080/deposit
+Content-Type: application/json
+
+{
+  "clientId": "db3fdf99-56e0-468b-bdb4-1f108cf20d30",
+  "amount": 120,
+  "dbType": "POSTGRES"
 }
