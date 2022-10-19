@@ -1,0 +1,7 @@
+POST localhost:8080/create
+Content-Type: application/json
+
+{
+  "nombre": "Victor Sanchez Grande",
+  "balance": 1000
+}
