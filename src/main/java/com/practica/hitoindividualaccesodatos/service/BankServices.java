@@ -58,4 +58,19 @@ public class BankServices {
             throw new RuntimeException(e);
         }
     }
+
+    public void deleteAccount(String clientId) {
+        try {
+            bankManager.checkDb(TransactionDbType.MYSQL);
+            bankManager.deleteTransaction(clientId);
+            bankManager.deleteAccount(clientId);
+            bankManager.checkDb(TransactionDbType.POSTGRES);
+            bankManager.deleteTransaction(clientId);
+            bankManager.deleteAccount(clientId);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

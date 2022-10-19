@@ -3,7 +3,7 @@ POST localhost:8080/create
 Content-Type: application/json
 
 {
-  "nombre": "Victor Sanchez Grande",
+  "nombre": "Melissa",
   "balance": 1000
 }
 
@@ -12,7 +12,10 @@ POST localhost:8080/deposit
 Content-Type: application/json
 
 {
-  "clientId": "db3fdf99-56e0-468b-bdb4-1f108cf20d30",
+  "clientId": "d6b8e1ff-7bab-4ffa-ad75-ed1b34560771",
   "amount": 120,
-  "dbType": "POSTGRES"
+  "dbType": "MYSQL"
 }
+
+### Eliminar cuenta
+POST localhost:8080/delete/d6b8e1ff-7bab-4ffa-ad75-ed1b34560771

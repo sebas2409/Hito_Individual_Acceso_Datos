@@ -88,9 +88,21 @@ public class DbRepository implements BankManager {
             var rs = ps.executeQuery();
             DepositResponse reponse = null;
             while (rs.next()) {
-                reponse =  new DepositResponse(rs.getString(1), rs.getString(2), rs.getDouble(3));
+                reponse = new DepositResponse(rs.getString(1), rs.getString(2), rs.getDouble(3));
             }
             return reponse;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Override
+    public void deleteTransaction(String clientId) {
+        try {
+            var ps = connection.prepareStatement("DELETE FROM transaccion where idcliente=?");
+            ps.setString(1, clientId);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

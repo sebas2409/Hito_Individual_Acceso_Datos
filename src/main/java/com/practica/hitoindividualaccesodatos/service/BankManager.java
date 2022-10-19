@@ -21,4 +21,6 @@ public interface BankManager {
     void createTransaction(Transaction transaction);
 
     DepositResponse getAccountById(String clientId);
+
+    void deleteTransaction(String clientId);
 }
