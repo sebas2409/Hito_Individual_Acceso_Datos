@@ -3,8 +3,8 @@ POST localhost:8080/create
 Content-Type: application/json
 
 {
-  "nombre": "Melissa",
-  "balance": 1000
+  "nombre": "Victor Sanchez Grande",
+  "balance": 200
 }
 
 ### Depositar fondos
@@ -12,8 +12,8 @@ POST localhost:8080/deposit
 Content-Type: application/json
 
 {
-  "clientId": "ab29a574-1e49-475c-930e-dcb28c51ef0b",
-  "amount": 120,
+  "clientId": "808c713f-36f5-4799-88ea-20487f29142a",
+  "amount": 60,
   "dbType": "MYSQL"
 }
 
@@ -26,7 +26,7 @@ POST localhost:8080/withdraw
 Content-Type: application/json
 
 {
-  "clientId": "",
-  "amount": 200,
+  "clientId": "808c713f-36f5-4799-88ea-20487f29142a",
+  "amount": 10,
   "dbType": "MYSQL"
 }

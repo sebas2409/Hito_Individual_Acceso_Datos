@@ -16,7 +16,7 @@ public interface BankManager {
 
     void depositFunds(String id, Double amount);
 
-    Object withdrawFunds(String id, Double amount);
+    Boolean withdrawFunds(String id, Double amount);
 
     void createTransaction(Transaction transaction);
 

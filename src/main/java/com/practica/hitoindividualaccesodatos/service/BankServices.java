@@ -47,7 +47,19 @@ public class BankServices {
     public Object withdrawFunds(WithdrawFundsDto withdrawFundsDto) {
         try {
             bankManager.checkDb(withdrawFundsDto.dbType());
-            return bankManager.withdrawFunds(withdrawFundsDto.clientId(), withdrawFundsDto.Amount());
+            var rs = bankManager.withdrawFunds(withdrawFundsDto.clientId(), withdrawFundsDto.amount());
+            if (rs){
+                bankManager.createTransaction(new Transaction(
+                        UUID.randomUUID().toString(),
+                        withdrawFundsDto.clientId(),
+                        TransactionType.RETIRAR,
+                        withdrawFundsDto.dbType(),
+                        LocalDateTime.now()
+                ));
+                return bankManager.getAccountById(withdrawFundsDto.clientId());
+            }else{
+                return false;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

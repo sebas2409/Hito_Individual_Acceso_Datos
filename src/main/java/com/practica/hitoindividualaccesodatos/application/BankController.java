@@ -42,8 +42,12 @@ public class BankController {
     }
 
     @PostMapping("withdraw")
-    public ResponseEntity<String> withdrawFunds(@RequestBody WithdrawFundsDto withdrawFundsDto) {
+    public ResponseEntity<Object> withdrawFunds(@RequestBody WithdrawFundsDto withdrawFundsDto) {
         var rs = bankServices.withdrawFunds(withdrawFundsDto);
-        return new ResponseEntity<>(rs.toString(), HttpStatus.ACCEPTED);
+        if (Boolean.FALSE.equals(rs)) {
+            return new ResponseEntity<>("No posees saldo suficiente", HttpStatus.FORBIDDEN);
+        } else {
+            return new ResponseEntity<>(rs, HttpStatus.ACCEPTED);
+        }
     }
 }
