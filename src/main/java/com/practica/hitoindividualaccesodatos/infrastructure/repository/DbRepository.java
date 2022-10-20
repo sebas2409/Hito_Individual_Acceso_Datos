@@ -61,8 +61,30 @@ public class DbRepository implements BankManager {
     }
 
     @Override
-    public Account withdrawFunds(String id, Double amount) {
-        return null;
+    public Object withdrawFunds(String id, Double amount) {
+        try {
+            var ps = connection.prepareStatement("SELECT * FROM cuenta where id=?");
+
+            ps.setString(1, id);
+            var rs = ps.executeQuery();
+            DepositResponse cuenta = null;
+            while (rs.next()) {
+                cuenta = new DepositResponse(id, rs.getString(2), rs.getDouble(3));
+            }
+            assert cuenta != null;
+            if (cuenta.balance() < amount) {
+                return "No posees, saldo suficiente para realizar esta operación!";
+            } else {
+                var ps2 = connection.prepareStatement("UPDATE cuenta set balance=balance-? where id=?");
+                ps2.setDouble(1, amount);
+                ps2.setString(2, id);
+                ps2.executeUpdate();
+                return "Realizado correctamene!";
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
@@ -100,7 +122,7 @@ public class DbRepository implements BankManager {
     @Override
     public void deleteTransaction(String clientId) {
         try {
-            var ps = connection.prepareStatement("DELETE FROM transaccion where idcliente=?");
+            var ps = connection.prepareStatement("DELETE FROM transaccion where clienteid=?"); //este parametro cambia dependiendo del nombre de la tabla.
             ps.setString(1, clientId);
             ps.executeUpdate();
         } catch (SQLException e) {

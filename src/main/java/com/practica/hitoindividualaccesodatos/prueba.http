@@ -12,10 +12,21 @@ POST localhost:8080/deposit
 Content-Type: application/json
 
 {
-  "clientId": "d6b8e1ff-7bab-4ffa-ad75-ed1b34560771",
+  "clientId": "ab29a574-1e49-475c-930e-dcb28c51ef0b",
   "amount": 120,
   "dbType": "MYSQL"
 }
 
 ### Eliminar cuenta
-POST localhost:8080/delete/d6b8e1ff-7bab-4ffa-ad75-ed1b34560771
+POST localhost:8080/delete/ab29a574-1e49-475c-930e-dcb28c51ef0b
+
+
+### Retirar fondos
+POST localhost:8080/withdraw
+Content-Type: application/json
+
+{
+  "clientId": "",
+  "amount": 200,
+  "dbType": "MYSQL"
+}

@@ -5,13 +5,11 @@ import com.practica.hitoindividualaccesodatos.domain.Account;
 import com.practica.hitoindividualaccesodatos.service.BankServices;
 import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
 import com.practica.hitoindividualaccesodatos.service.dto.DespositDto;
+import com.practica.hitoindividualaccesodatos.service.dto.WithdrawFundsDto;
 import com.practica.hitoindividualaccesodatos.util.AccountMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BankController {
@@ -38,8 +36,14 @@ public class BankController {
     }
 
     @PostMapping("delete/{id}")
-    public ResponseEntity<String> deleteAccount(@PathVariable String id){
+    public ResponseEntity<String> deleteAccount(@PathVariable String id) {
         bankServices.deleteAccount(id);
         return ResponseEntity.ok("Eliminado Correctamente!");
+    }
+
+    @PostMapping("withdraw")
+    public ResponseEntity<String> withdrawFunds(@RequestBody WithdrawFundsDto withdrawFundsDto) {
+        var rs = bankServices.withdrawFunds(withdrawFundsDto);
+        return new ResponseEntity<>(rs.toString(), HttpStatus.ACCEPTED);
     }
 }

@@ -28,7 +28,7 @@ create table cuenta(
 
 create table transaccion(
                             id varchar(50) primary key,
-                            idcliente varchar(50) references cuenta(id),
+                            idcliente varchar(50) references cuenta(id), --columna problematica
                             tipotransaccion varchar(50),
                             tipodb varchar(50),
                             fechatransaccion varchar(50)
