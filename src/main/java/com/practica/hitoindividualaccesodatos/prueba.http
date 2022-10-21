@@ -3,8 +3,8 @@ POST localhost:8080/create
 Content-Type: application/json
 
 {
-  "nombre": "Victor Sanchez Grande",
-  "balance": 200
+  "nombre": "Mario Valverde",
+  "balance": 1000
 }
 
 ### Depositar fondos
@@ -30,3 +30,15 @@ Content-Type: application/json
   "amount": 10,
   "dbType": "MYSQL"
 }
+
+### Obtener csv cuentas mysql
+GET localhost:8080/accounts-mysql
+
+### Obtener csv cuentas postgres
+GET localhost:8080/accounts-postgres
+
+### Obtener csv transacciones mysql
+GET localhost:8080/transactions-mysql
+
+### Obtener csv transacciones postgres
+GET localhost:8080/transactions-postgres

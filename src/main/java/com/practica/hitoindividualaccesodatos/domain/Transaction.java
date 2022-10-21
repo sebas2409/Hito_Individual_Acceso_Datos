@@ -16,5 +16,4 @@ public class Transaction {
     private TransactionType tipoTransaccion;
     private TransactionDbType tipoDb;
     private LocalDateTime timeStamp;
-
 }

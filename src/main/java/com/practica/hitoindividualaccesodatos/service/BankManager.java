@@ -6,6 +6,7 @@ import com.practica.hitoindividualaccesodatos.domain.TransactionDbType;
 import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public interface BankManager {
     void checkDb(TransactionDbType dbType) throws SQLException;
@@ -23,4 +24,6 @@ public interface BankManager {
     DepositResponse getAccountById(String clientId);
 
     void deleteTransaction(String clientId);
+    ArrayList<Account> getAllAccounts();
+    ArrayList<Transaction> getAllTransactions();
 }

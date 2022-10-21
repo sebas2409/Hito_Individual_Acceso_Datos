@@ -3,12 +3,14 @@ package com.practica.hitoindividualaccesodatos.infrastructure.repository;
 import com.practica.hitoindividualaccesodatos.domain.Account;
 import com.practica.hitoindividualaccesodatos.domain.Transaction;
 import com.practica.hitoindividualaccesodatos.domain.TransactionDbType;
+import com.practica.hitoindividualaccesodatos.domain.TransactionType;
 import com.practica.hitoindividualaccesodatos.service.BankManager;
 import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Repository
 public class DbRepository implements BankManager {
@@ -122,7 +124,7 @@ public class DbRepository implements BankManager {
     @Override
     public void deleteTransaction(String clientId) {
         try {
-            var ps = connection.prepareStatement("DELETE FROM transaccion where idcliente=?"); //este parametro cambia dependiendo del nombre de la tabla.
+            var ps = connection.prepareStatement("DELETE FROM transaccion where clienteid=?"); //este parametro cambia dependiendo del nombre de la tabla.
             ps.setString(1, clientId);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -130,4 +132,45 @@ public class DbRepository implements BankManager {
         }
 
     }
+
+    @Override
+    public ArrayList<Account> getAllAccounts() {
+        try {
+            var ps = connection.prepareStatement("SELECT * from cuenta");
+            var rs = ps.executeQuery();
+            var listaCuentas = new ArrayList<Account>();
+            while (rs.next()) {
+                listaCuentas.add(new Account(rs.getString(1),
+                        rs.getString(2),
+                        rs.getDouble(3),
+                        LocalDateTime.parse(rs.getString(4))));
+            }
+            return listaCuentas;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ArrayList<Transaction> getAllTransactions() {
+        try {
+            var ps = connection.prepareStatement("SELECT * FROM transaccion");
+            var rs = ps.executeQuery();
+            var listaTransacciones = new ArrayList<Transaction>();
+            while (rs.next()) {
+                listaTransacciones.add(new Transaction(
+                        rs.getString(1),
+                        rs.getString(2),
+                        TransactionType.valueOf(rs.getString(3)),
+                        TransactionDbType.valueOf(rs.getString(4)),
+                        LocalDateTime.parse(rs.getString(5))
+                ));
+            }
+            return listaTransacciones;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
