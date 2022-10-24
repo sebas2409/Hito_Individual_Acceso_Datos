@@ -56,7 +56,7 @@ public class BankServices {
         try {
             bankManager.checkDb(withdrawFundsDto.dbType());
             var rs = bankManager.withdrawFunds(withdrawFundsDto.clientId(), withdrawFundsDto.amount());
-            if (rs){
+            if (rs) {
                 bankManager.createTransaction(new Transaction(
                         UUID.randomUUID().toString(),
                         withdrawFundsDto.clientId(),
@@ -65,7 +65,7 @@ public class BankServices {
                         LocalDateTime.now()
                 ));
                 return bankManager.getAccountById(withdrawFundsDto.clientId());
-            }else{
+            } else {
                 return false;
             }
         } catch (SQLException e) {
@@ -102,7 +102,7 @@ public class BankServices {
         }
     }
 
-    public ArrayList<Account> getAllPostgresAccounts(){
+    public ArrayList<Account> getAllPostgresAccounts() {
         try {
             bankManager.checkDb(TransactionDbType.POSTGRES);
             return bankManager.getAllAccounts();
@@ -121,8 +121,8 @@ public class BankServices {
         }
     }
 
-    public void getCsvAccounts(ArrayList<Account> lista, HttpServletResponse response, String nombreArchivo){
-        var filename = "cuenta_"+nombreArchivo+".csv";
+    public void getCsvAccounts(ArrayList<Account> lista, HttpServletResponse response, String nombreArchivo) {
+        var filename = "cuenta_" + nombreArchivo + ".csv";
         response.setContentType("text/csv");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + filename + "\"");
@@ -139,8 +139,8 @@ public class BankServices {
         }
     }
 
-    public void getCsvTransacctions(ArrayList<Transaction> lista, HttpServletResponse response, String nombreArchivo){
-        var filename = "transaccion_"+nombreArchivo+".csv";
+    public void getCsvTransacctions(ArrayList<Transaction> lista, HttpServletResponse response, String nombreArchivo) {
+        var filename = "transaccion_" + nombreArchivo + ".csv";
         response.setContentType("text/csv");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + filename + "\"");
@@ -157,7 +157,7 @@ public class BankServices {
         }
     }
 
-    public ArrayList<Transaction> getAllMysqlTransactions(){
+    public ArrayList<Transaction> getAllMysqlTransactions() {
         try {
             bankManager.checkDb(TransactionDbType.MYSQL);
             return bankManager.getAllTransactions();
@@ -173,5 +173,14 @@ public class BankServices {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String login(String id) {
+        try {
+            bankManager.checkDb(TransactionDbType.MYSQL);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return bankManager.login(id);
     }
 }

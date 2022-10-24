@@ -26,4 +26,5 @@ public interface BankManager {
     void deleteTransaction(String clientId);
     ArrayList<Account> getAllAccounts();
     ArrayList<Transaction> getAllTransactions();
+    String login(String id);
 }

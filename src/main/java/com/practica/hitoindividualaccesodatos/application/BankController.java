@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BankController {
 
     private final BankServices bankServices;
@@ -71,6 +72,19 @@ public class BankController {
     @GetMapping("transactions-mysql")
     public void getCsvMysqlTransactions(HttpServletResponse response) {
         bankServices.getCsvTransacctions(bankServices.getAllMysqlTransactions(), response, "mysql");
+    }
+
+
+
+    @GetMapping("login/{id}")
+    public ResponseEntity<String> login(@PathVariable String id) {
+        System.out.println(id);
+        var rs = bankServices.login(id);
+        if (rs != null) {
+            return ResponseEntity.status(HttpStatus.OK).body("");
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("");
+        }
     }
 
 }

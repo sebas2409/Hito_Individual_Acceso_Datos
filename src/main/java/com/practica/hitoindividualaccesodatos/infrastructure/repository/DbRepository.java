@@ -8,7 +8,9 @@ import com.practica.hitoindividualaccesodatos.service.BankManager;
 import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -167,6 +169,23 @@ public class DbRepository implements BankManager {
                 ));
             }
             return listaTransacciones;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String login(String id) {
+        try {
+            var ps = connection.prepareStatement("SELECT * FROM cuenta WHERE id=?");
+            ps.setString(1,id);
+            System.out.println(id);
+            var rs = ps.executeQuery();
+            String idKey = null;
+            while (rs.next()){
+                idKey = rs.getString(1);
+            }
+            return idKey;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -42,3 +42,6 @@ GET localhost:8080/transactions-mysql
 
 ### Obtener csv transacciones postgres
 GET localhost:8080/transactions-postgres
+
+### login
+GET http://localhost:8080/login/4793c3e8-2370-4301-a368-d72f08fab065
