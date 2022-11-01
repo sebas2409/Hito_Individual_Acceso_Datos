@@ -15,6 +15,7 @@ public class AccountMapper {
         return Account.builder()
                 .id(UUID.randomUUID().toString())
                 .nombre(accountDto.nombre())
+                .dni(accountDto.dni())
                 .cc(getAccountNumber())
                 .balance(accountDto.balance())
                 .fechaCreacion(LocalDateTime.now())

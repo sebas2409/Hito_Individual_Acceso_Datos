@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class Account {
     private String id;
     private String nombre;
+    private String dni;
     private String cc;
     private Double balance;
     private LocalDateTime fechaCreacion;

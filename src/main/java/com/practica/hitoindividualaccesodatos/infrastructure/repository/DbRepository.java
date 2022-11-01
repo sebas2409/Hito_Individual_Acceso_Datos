@@ -30,12 +30,13 @@ public class DbRepository implements BankManager {
     @Override
     public void createAccount(Account account) {
         try {
-            var ps = connection.prepareStatement("INSERT INTO cuenta values(?,?,?,?,?)");
+            var ps = connection.prepareStatement("INSERT INTO cuenta values(?,?,?,?,?,?)");
             ps.setString(1, account.getId());
             ps.setString(2, account.getNombre());
-            ps.setString(3, account.getCc());
-            ps.setDouble(4, account.getBalance());
-            ps.setString(5, String.valueOf(account.getFechaCreacion()));
+            ps.setString(3, account.getDni());
+            ps.setString(4, account.getCc());
+            ps.setDouble(5, account.getBalance());
+            ps.setString(6, String.valueOf(account.getFechaCreacion()));
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -146,8 +147,9 @@ public class DbRepository implements BankManager {
                 listaCuentas.add(new Account(rs.getString(1),
                         rs.getString(2),
                         rs.getString(3),
-                        rs.getDouble(4),
-                        LocalDateTime.parse(rs.getString(5))));
+                        rs.getString(4),
+                        rs.getDouble(5),
+                        LocalDateTime.parse(rs.getString(6))));
             }
             return listaCuentas;
         } catch (SQLException e) {

@@ -4,6 +4,7 @@ Content-Type: application/json
 
 {
   "nombre": "Juan Sebastian Gonzalez Lopez",
+  "dni": "80232570Z",
   "balance": 1000
 }
 
