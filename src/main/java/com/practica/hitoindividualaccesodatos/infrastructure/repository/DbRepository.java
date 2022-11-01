@@ -2,7 +2,6 @@ package com.practica.hitoindividualaccesodatos.infrastructure.repository;
 
 import com.practica.hitoindividualaccesodatos.domain.Account;
 import com.practica.hitoindividualaccesodatos.domain.Transaction;
-import com.practica.hitoindividualaccesodatos.domain.TransactionDbType;
 import com.practica.hitoindividualaccesodatos.domain.TransactionType;
 import com.practica.hitoindividualaccesodatos.service.BankManager;
 import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
@@ -17,24 +16,26 @@ import java.util.ArrayList;
 @Repository
 public class DbRepository implements BankManager {
 
-    private Connection connection;
+    private final Connection connection;
 
-    public void checkDb(TransactionDbType dbType) throws SQLException {
-        if (dbType.equals(TransactionDbType.MYSQL)) {
+    public DbRepository() {
+        try {
             this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/banco", "root", "root");
-        } else {
-            this.connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/banco", "root", "root");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+        ;
     }
 
     @Override
     public void createAccount(Account account) {
         try {
-            var ps = connection.prepareStatement("INSERT INTO cuenta values(?,?,?,?)");
+            var ps = connection.prepareStatement("INSERT INTO cuenta values(?,?,?,?,?)");
             ps.setString(1, account.getId());
             ps.setString(2, account.getNombre());
-            ps.setDouble(3, account.getBalance());
-            ps.setString(4, String.valueOf(account.getFechaCreacion()));
+            ps.setString(3, account.getCc());
+            ps.setDouble(4, account.getBalance());
+            ps.setString(5, String.valueOf(account.getFechaCreacion()));
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -73,7 +74,7 @@ public class DbRepository implements BankManager {
             var rs = ps.executeQuery();
             DepositResponse cuenta = null;
             while (rs.next()) {
-                cuenta = new DepositResponse(id, rs.getString(2), rs.getDouble(3));
+                cuenta = new DepositResponse(id, rs.getString(2), rs.getDouble(4));
             }
             assert cuenta != null;
             if (cuenta.balance() < amount) {
@@ -98,7 +99,7 @@ public class DbRepository implements BankManager {
             ps.setString(1, transaction.getId());
             ps.setString(2, transaction.getAccountId());
             ps.setString(3, transaction.getTipoTransaccion().toString());
-            ps.setString(4, transaction.getTipoDb().toString());
+            ps.setDouble(4, transaction.getImporte());
             ps.setString(5, LocalDateTime.now().toString());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -114,7 +115,7 @@ public class DbRepository implements BankManager {
             var rs = ps.executeQuery();
             DepositResponse reponse = null;
             while (rs.next()) {
-                reponse = new DepositResponse(rs.getString(1), rs.getString(2), rs.getDouble(3));
+                reponse = new DepositResponse(rs.getString(1), rs.getString(2), rs.getDouble(4));
             }
             return reponse;
         } catch (SQLException e) {
@@ -126,7 +127,7 @@ public class DbRepository implements BankManager {
     @Override
     public void deleteTransaction(String clientId) {
         try {
-            var ps = connection.prepareStatement("DELETE FROM transaccion where clienteid=?"); //este parametro cambia dependiendo del nombre de la tabla.
+            var ps = connection.prepareStatement("DELETE FROM transaccion where idcliente=?"); //este parametro cambia dependiendo del nombre de la tabla.
             ps.setString(1, clientId);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -144,8 +145,9 @@ public class DbRepository implements BankManager {
             while (rs.next()) {
                 listaCuentas.add(new Account(rs.getString(1),
                         rs.getString(2),
-                        rs.getDouble(3),
-                        LocalDateTime.parse(rs.getString(4))));
+                        rs.getString(3),
+                        rs.getDouble(4),
+                        LocalDateTime.parse(rs.getString(5))));
             }
             return listaCuentas;
         } catch (SQLException e) {
@@ -164,7 +166,7 @@ public class DbRepository implements BankManager {
                         rs.getString(1),
                         rs.getString(2),
                         TransactionType.valueOf(rs.getString(3)),
-                        TransactionDbType.valueOf(rs.getString(4)),
+                        rs.getDouble(4),
                         LocalDateTime.parse(rs.getString(5))
                 ));
             }
@@ -178,11 +180,11 @@ public class DbRepository implements BankManager {
     public String login(String id) {
         try {
             var ps = connection.prepareStatement("SELECT * FROM cuenta WHERE id=?");
-            ps.setString(1,id);
+            ps.setString(1, id);
             System.out.println(id);
             var rs = ps.executeQuery();
             String idKey = null;
-            while (rs.next()){
+            while (rs.next()) {
                 idKey = rs.getString(1);
             }
             return idKey;

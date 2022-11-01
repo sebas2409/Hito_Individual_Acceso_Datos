@@ -6,7 +6,6 @@ import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.practica.hitoindividualaccesodatos.domain.Account;
 import com.practica.hitoindividualaccesodatos.domain.Transaction;
-import com.practica.hitoindividualaccesodatos.domain.TransactionDbType;
 import com.practica.hitoindividualaccesodatos.domain.TransactionType;
 import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
 import com.practica.hitoindividualaccesodatos.service.dto.DespositDto;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -31,94 +29,50 @@ public class BankServices {
     }
 
     public void createAccount(Account account) {
-        try {
-            var uuid = UUID.randomUUID().toString();
-            bankManager.checkDb(TransactionDbType.MYSQL);
-            bankManager.createAccount(account);
-            bankManager.createTransaction(new Transaction(uuid,
-                    account.getId(),
-                    TransactionType.CREAR,
-                    TransactionDbType.MYSQL,
-                    account.getFechaCreacion()));
-            bankManager.checkDb(TransactionDbType.POSTGRES);
-            bankManager.createAccount(account);
-            bankManager.createTransaction(new Transaction(uuid,
-                    account.getId(),
-                    TransactionType.CREAR,
-                    TransactionDbType.POSTGRES,
-                    account.getFechaCreacion()));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        var uuid = UUID.randomUUID().toString();
+        bankManager.createAccount(account);
+        bankManager.createTransaction(new Transaction(uuid,
+                account.getId(),
+                TransactionType.CREAR,
+                0.0,
+                account.getFechaCreacion()));
     }
 
     public Object withdrawFunds(WithdrawFundsDto withdrawFundsDto) {
-        try {
-            bankManager.checkDb(withdrawFundsDto.dbType());
-            var rs = bankManager.withdrawFunds(withdrawFundsDto.clientId(), withdrawFundsDto.amount());
-            if (rs) {
-                bankManager.createTransaction(new Transaction(
-                        UUID.randomUUID().toString(),
-                        withdrawFundsDto.clientId(),
-                        TransactionType.RETIRAR,
-                        withdrawFundsDto.dbType(),
-                        LocalDateTime.now()
-                ));
-                return bankManager.getAccountById(withdrawFundsDto.clientId());
-            } else {
-                return false;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        var rs = bankManager.withdrawFunds(withdrawFundsDto.clientId(), withdrawFundsDto.amount());
+        if (rs) {
+            bankManager.createTransaction(new Transaction(
+                    UUID.randomUUID().toString(),
+                    withdrawFundsDto.clientId(),
+                    TransactionType.RETIRAR,
+                    withdrawFundsDto.amount(),
+                    LocalDateTime.now()
+            ));
+            return bankManager.getAccountById(withdrawFundsDto.clientId());
+        } else {
+            return false;
         }
     }
 
     public DepositResponse depositFunds(DespositDto depositDto) {
-        try {
-            bankManager.checkDb(depositDto.dbType());
-            bankManager.depositFunds(depositDto.clientId(), depositDto.amount());
-            bankManager.createTransaction(new Transaction(UUID.randomUUID().toString(),
-                    depositDto.clientId(),
-                    TransactionType.INGRESAR,
-                    depositDto.dbType(),
-                    LocalDateTime.now()));
-            return bankManager.getAccountById(depositDto.clientId());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        bankManager.depositFunds(depositDto.clientId(), depositDto.amount());
+        bankManager.createTransaction(new Transaction(UUID.randomUUID().toString(),
+                depositDto.clientId(),
+                TransactionType.INGRESAR,
+                depositDto.amount(),
+                LocalDateTime.now()));
+        return bankManager.getAccountById(depositDto.clientId());
     }
 
     public void deleteAccount(String clientId) {
-        try {
-            bankManager.checkDb(TransactionDbType.MYSQL);
-            bankManager.deleteTransaction(clientId);
-            bankManager.deleteAccount(clientId);
-            bankManager.checkDb(TransactionDbType.POSTGRES);
-            bankManager.deleteTransaction(clientId);
-            bankManager.deleteAccount(clientId);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public ArrayList<Account> getAllPostgresAccounts() {
-        try {
-            bankManager.checkDb(TransactionDbType.POSTGRES);
-            return bankManager.getAllAccounts();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        bankManager.deleteTransaction(clientId);
+        bankManager.deleteAccount(clientId);
 
     }
+
 
     public ArrayList<Account> getAllMysqlAccounts() {
-        try {
-            bankManager.checkDb(TransactionDbType.MYSQL);
-            return bankManager.getAllAccounts();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return bankManager.getAllAccounts();
     }
 
     public void getCsvAccounts(ArrayList<Account> lista, HttpServletResponse response, String nombreArchivo) {
@@ -158,29 +112,11 @@ public class BankServices {
     }
 
     public ArrayList<Transaction> getAllMysqlTransactions() {
-        try {
-            bankManager.checkDb(TransactionDbType.MYSQL);
-            return bankManager.getAllTransactions();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return bankManager.getAllTransactions();
     }
 
-    public ArrayList<Transaction> getAllPostgreslTransactions() {
-        try {
-            bankManager.checkDb(TransactionDbType.POSTGRES);
-            return bankManager.getAllTransactions();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public String login(String id) {
-        try {
-            bankManager.checkDb(TransactionDbType.MYSQL);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         return bankManager.login(id);
     }
 }

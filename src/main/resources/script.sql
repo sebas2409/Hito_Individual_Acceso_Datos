@@ -4,6 +4,7 @@ use banco;
 create table cuenta(
                        id varchar(50) primary key,
                        nombre varchar(50),
+                       cc varchar(100),
                        balance double,
                        fechaCreacion varchar(50)
 );
@@ -12,7 +13,7 @@ create table transaccion(
                             id varchar(50) primary key,
                             idcliente varchar(50),
                             tipoTransaccion varchar(50),
-                            tipoDb varchar(50),
+                            importe double,
                             fechaTransaccion varchar(50),
                             foreign key transaccion(idCliente) references cuenta(id)
 

@@ -54,26 +54,17 @@ public class BankController {
         }
     }
 
-    @GetMapping("accounts-postgres")
-    public void getCsvPostgresAccounts(HttpServletResponse response) {
-        bankServices.getCsvAccounts(bankServices.getAllPostgresAccounts(), response, "postgres");
-    }
 
     @GetMapping("accounts-mysql")
     public void getCsvMysqlAccounts(HttpServletResponse response) {
         bankServices.getCsvAccounts(bankServices.getAllMysqlAccounts(), response, "mysql");
     }
 
-    @GetMapping("transactions-postgres")
-    public void getCsvPostgresTransactions(HttpServletResponse response) {
-        bankServices.getCsvTransacctions(bankServices.getAllPostgreslTransactions(), response, "postgres");
-    }
 
     @GetMapping("transactions-mysql")
     public void getCsvMysqlTransactions(HttpServletResponse response) {
         bankServices.getCsvTransacctions(bankServices.getAllMysqlTransactions(), response, "mysql");
     }
-
 
 
     @GetMapping("login/{id}")

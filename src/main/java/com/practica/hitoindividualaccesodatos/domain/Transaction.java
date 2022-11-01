@@ -14,6 +14,6 @@ public class Transaction {
     private String id;
     private String AccountId;
     private TransactionType tipoTransaccion;
-    private TransactionDbType tipoDb;
+    private Double importe;
     private LocalDateTime timeStamp;
 }

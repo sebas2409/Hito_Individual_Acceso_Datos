@@ -2,14 +2,11 @@ package com.practica.hitoindividualaccesodatos.service;
 
 import com.practica.hitoindividualaccesodatos.domain.Account;
 import com.practica.hitoindividualaccesodatos.domain.Transaction;
-import com.practica.hitoindividualaccesodatos.domain.TransactionDbType;
 import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface BankManager {
-    void checkDb(TransactionDbType dbType) throws SQLException;
 
     void createAccount(Account account);
 
