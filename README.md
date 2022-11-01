@@ -8,7 +8,7 @@
 
 ### Bank Service - Mobile
 
-<a href="https://github.com/sebas2409/hitoIndividual">Link al repositorio</a>
+<a href="https://github.com/sebas2409/hitoIndividualProgramacionMultimedia">Link al repositorio</a>
 
 * Arquitectura MVVM
 * Retrofit
