@@ -179,20 +179,8 @@ public class DbRepository implements BankManager {
     }
 
     @Override
-    public String login(String id) {
-        try {
-            var ps = connection.prepareStatement("SELECT * FROM cuenta WHERE id=?");
-            ps.setString(1, id);
-            System.out.println(id);
-            var rs = ps.executeQuery();
-            String idKey = null;
-            while (rs.next()) {
-                idKey = rs.getString(1);
-            }
-            return idKey;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public DepositResponse login(String id) {
+        return getAccountById(id);
     }
 
 

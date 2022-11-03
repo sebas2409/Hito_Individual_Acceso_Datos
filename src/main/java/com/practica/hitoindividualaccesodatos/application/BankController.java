@@ -68,14 +68,11 @@ public class BankController {
 
 
     @GetMapping("login/{id}")
-    public ResponseEntity<String> login(@PathVariable String id) {
+    public ResponseEntity<DepositResponse> login(@PathVariable String id) {
         System.out.println(id);
         var rs = bankServices.login(id);
-        if (rs != null) {
-            return ResponseEntity.status(HttpStatus.OK).body("");
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("");
-        }
+        System.out.println(rs);
+        return ResponseEntity.status(HttpStatus.OK).body(rs);
     }
 
 }

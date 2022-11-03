@@ -116,7 +116,7 @@ public class BankServices {
     }
 
 
-    public String login(String id) {
+    public DepositResponse login(String id) {
         return bankManager.login(id);
     }
 }
