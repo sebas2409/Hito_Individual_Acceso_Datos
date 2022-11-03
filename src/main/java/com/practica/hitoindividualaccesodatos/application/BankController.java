@@ -72,7 +72,11 @@ public class BankController {
         System.out.println(id);
         var rs = bankServices.login(id);
         System.out.println(rs);
-        return ResponseEntity.status(HttpStatus.OK).body(rs);
+        if (rs != null) {
+            return new ResponseEntity<>(rs, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(DepositResponse.builder().id("").nombre("").balance(0.0).build(), HttpStatus.FORBIDDEN);
+        }
     }
 
 }

@@ -116,7 +116,7 @@ public class DbRepository implements BankManager {
             var rs = ps.executeQuery();
             DepositResponse reponse = null;
             while (rs.next()) {
-                reponse = new DepositResponse(rs.getString(1), rs.getString(2), rs.getDouble(4));
+                reponse = new DepositResponse(rs.getString(1), rs.getString(2), rs.getDouble(5));
             }
             return reponse;
         } catch (SQLException e) {
