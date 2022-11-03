@@ -1,17 +1,16 @@
 package com.practica.hitoindividualaccesodatos.application;
 
-import com.practica.hitoindividualaccesodatos.service.dto.AccountDto;
+import com.practica.hitoindividualaccesodatos.domain.Transaction;
+import com.practica.hitoindividualaccesodatos.service.dto.*;
 import com.practica.hitoindividualaccesodatos.domain.Account;
 import com.practica.hitoindividualaccesodatos.service.BankServices;
-import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
-import com.practica.hitoindividualaccesodatos.service.dto.DespositDto;
-import com.practica.hitoindividualaccesodatos.service.dto.WithdrawFundsDto;
 import com.practica.hitoindividualaccesodatos.util.AccountMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -77,6 +76,18 @@ public class BankController {
         } else {
             return new ResponseEntity<>(DepositResponse.builder().id("").nombre("").balance(0.0).build(), HttpStatus.FORBIDDEN);
         }
+    }
+
+    @GetMapping("account/{id}")
+    public ResponseEntity<AccountResponse> getAccount(@PathVariable String id) {
+        var rs = bankServices.getAccount(id);
+        return new ResponseEntity<>(rs, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("transaction/{id}")
+    public ResponseEntity<ArrayList<Transaction>> getAllTransaction(@PathVariable String id) {
+        var rs = bankServices.getTransactionsById(id);
+        return new ResponseEntity<>(rs, HttpStatus.ACCEPTED);
     }
 
 }

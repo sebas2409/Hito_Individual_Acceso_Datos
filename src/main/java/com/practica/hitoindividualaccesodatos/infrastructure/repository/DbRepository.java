@@ -4,12 +4,14 @@ import com.practica.hitoindividualaccesodatos.domain.Account;
 import com.practica.hitoindividualaccesodatos.domain.Transaction;
 import com.practica.hitoindividualaccesodatos.domain.TransactionType;
 import com.practica.hitoindividualaccesodatos.service.BankManager;
+import com.practica.hitoindividualaccesodatos.service.dto.AccountResponse;
 import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -75,7 +77,7 @@ public class DbRepository implements BankManager {
             var rs = ps.executeQuery();
             DepositResponse cuenta = null;
             while (rs.next()) {
-                cuenta = new DepositResponse(id, rs.getString(2), rs.getDouble(4));
+                cuenta = new DepositResponse(id, rs.getString(2), rs.getDouble(5));
             }
             assert cuenta != null;
             if (cuenta.balance() < amount) {
@@ -98,11 +100,33 @@ public class DbRepository implements BankManager {
         try {
             var ps = connection.prepareStatement("INSERT INTO transaccion values (?,?,?,?,?)");
             ps.setString(1, transaction.getId());
-            ps.setString(2, transaction.getAccountId());
+            ps.setString(2, transaction.getIdCliente());
             ps.setString(3, transaction.getTipoTransaccion().toString());
             ps.setDouble(4, transaction.getImporte());
-            ps.setString(5, LocalDateTime.now().toString());
+            ps.setString(5, LocalDate.now().toString());
             ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public AccountResponse getAccountById2(String clientId) {
+        try {
+            var ps = connection.prepareStatement("SELECT * FROM cuenta WHERE id=?");
+            ps.setString(1, clientId);
+            var rs = ps.executeQuery();
+            AccountResponse reponse = null;
+            while (rs.next()) {
+                reponse = new AccountResponse(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getDouble(5),
+                        rs.getString(6));
+            }
+            return reponse;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -149,7 +173,7 @@ public class DbRepository implements BankManager {
                         rs.getString(3),
                         rs.getString(4),
                         rs.getDouble(5),
-                        LocalDateTime.parse(rs.getString(6))));
+                        LocalDate.parse(rs.getString(6))));
             }
             return listaCuentas;
         } catch (SQLException e) {
@@ -169,7 +193,29 @@ public class DbRepository implements BankManager {
                         rs.getString(2),
                         TransactionType.valueOf(rs.getString(3)),
                         rs.getDouble(4),
-                        LocalDateTime.parse(rs.getString(5))
+                        LocalDate.parse(rs.getString(5))
+                ));
+            }
+            return listaTransacciones;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ArrayList<Transaction> getAllTransactionsFromId(String id) {
+        try {
+            var ps = connection.prepareStatement("SELECT * FROM transaccion where idcliente=?");
+            ps.setString(1,id);
+            var rs = ps.executeQuery();
+            var listaTransacciones = new ArrayList<Transaction>();
+            while (rs.next()) {
+                listaTransacciones.add(new Transaction(
+                        rs.getString(1),
+                        rs.getString(2),
+                        TransactionType.valueOf(rs.getString(3)),
+                        rs.getDouble(4),
+                        LocalDate.parse(rs.getString(5))
                 ));
             }
             return listaTransacciones;

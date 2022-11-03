@@ -13,7 +13,7 @@ POST localhost:8080/deposit
 Content-Type: application/json
 
 {
-  "clientId": "594d13d1-1d74-4866-a605-0f93bbc63ea3",
+  "clientId": "411d564e-a624-46ce-92cf-9e4301ebc063",
   "amount": 150
 }
 
@@ -26,7 +26,7 @@ POST localhost:8080/withdraw
 Content-Type: application/json
 
 {
-  "clientId": "594d13d1-1d74-4866-a605-0f93bbc63ea3",
+  "clientId": "411d564e-a624-46ce-92cf-9e4301ebc063",
   "amount": 20
 }
 
@@ -40,3 +40,9 @@ GET localhost:8080/transactions-mysql
 
 ### login
 GET http://localhost:8080/login/1
+
+### get account id
+GET http://localhost:8080/account/3dd1f50b-9094-442a-9146-00adad69bad6
+
+### get transaction id
+GET http://localhost:8080/transaction/411d564e-a624-46ce-92cf-9e4301ebc063

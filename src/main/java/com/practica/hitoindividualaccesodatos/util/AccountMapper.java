@@ -5,6 +5,7 @@ import com.practica.hitoindividualaccesodatos.service.dto.AccountDto;
 import com.practica.hitoindividualaccesodatos.domain.Account;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class AccountMapper {
                 .dni(accountDto.dni())
                 .cc(getAccountNumber())
                 .balance(accountDto.balance())
-                .fechaCreacion(LocalDateTime.now())
+                .fechaCreacion(LocalDate.now())
                 .build();
     }
 

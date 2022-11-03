@@ -2,6 +2,7 @@ package com.practica.hitoindividualaccesodatos.service;
 
 import com.practica.hitoindividualaccesodatos.domain.Account;
 import com.practica.hitoindividualaccesodatos.domain.Transaction;
+import com.practica.hitoindividualaccesodatos.service.dto.AccountResponse;
 import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
 
 import java.util.ArrayList;
@@ -18,10 +19,12 @@ public interface BankManager {
 
     void createTransaction(Transaction transaction);
 
-    DepositResponse getAccountById(String clientId);
+    AccountResponse getAccountById2(String clientId);
+    DepositResponse getAccountById(String id);
 
     void deleteTransaction(String clientId);
     ArrayList<Account> getAllAccounts();
     ArrayList<Transaction> getAllTransactions();
+    ArrayList<Transaction> getAllTransactionsFromId(String id);
     DepositResponse login(String id);
 }

@@ -7,6 +7,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.practica.hitoindividualaccesodatos.domain.Account;
 import com.practica.hitoindividualaccesodatos.domain.Transaction;
 import com.practica.hitoindividualaccesodatos.domain.TransactionType;
+import com.practica.hitoindividualaccesodatos.service.dto.AccountResponse;
 import com.practica.hitoindividualaccesodatos.service.dto.DepositResponse;
 import com.practica.hitoindividualaccesodatos.service.dto.DespositDto;
 import com.practica.hitoindividualaccesodatos.service.dto.WithdrawFundsDto;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -46,7 +48,7 @@ public class BankServices {
                     withdrawFundsDto.clientId(),
                     TransactionType.RETIRAR,
                     withdrawFundsDto.amount(),
-                    LocalDateTime.now()
+                    LocalDate.now()
             ));
             return bankManager.getAccountById(withdrawFundsDto.clientId());
         } else {
@@ -60,7 +62,7 @@ public class BankServices {
                 depositDto.clientId(),
                 TransactionType.INGRESAR,
                 depositDto.amount(),
-                LocalDateTime.now()));
+                LocalDate.now()));
         return bankManager.getAccountById(depositDto.clientId());
     }
 
@@ -118,5 +120,13 @@ public class BankServices {
 
     public DepositResponse login(String id) {
         return bankManager.login(id);
+    }
+
+    public AccountResponse getAccount(String id) {
+        return bankManager.getAccountById2(id);
+    }
+
+    public ArrayList<Transaction> getTransactionsById(String id) {
+        return bankManager.getAllTransactionsFromId(id);
     }
 }

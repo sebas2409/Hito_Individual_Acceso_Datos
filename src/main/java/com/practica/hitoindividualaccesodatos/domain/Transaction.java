@@ -2,6 +2,7 @@ package com.practica.hitoindividualaccesodatos.domain;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
@@ -12,8 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 public class Transaction {
     private String id;
-    private String AccountId;
+    private String idCliente;
     private TransactionType tipoTransaccion;
     private Double importe;
-    private LocalDateTime timeStamp;
+    private LocalDate timeStamp;
 }

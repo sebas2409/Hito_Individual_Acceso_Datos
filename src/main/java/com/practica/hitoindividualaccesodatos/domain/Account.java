@@ -2,6 +2,7 @@ package com.practica.hitoindividualaccesodatos.domain;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
@@ -16,5 +17,5 @@ public class Account {
     private String dni;
     private String cc;
     private Double balance;
-    private LocalDateTime fechaCreacion;
+    private LocalDate fechaCreacion;
 }
