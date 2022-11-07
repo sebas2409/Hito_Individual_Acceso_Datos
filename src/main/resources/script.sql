@@ -19,7 +19,7 @@ create table transaccion(
                             foreign key transaccion(idCliente) references cuenta(id)
 
 );
--------------
+------------- POSTGRESQL
 create database banco;
 create table cuenta(
                        id varchar(50) primary key,

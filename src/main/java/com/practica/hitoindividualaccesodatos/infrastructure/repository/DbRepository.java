@@ -22,6 +22,7 @@ public class DbRepository implements BankManager {
 
     public DbRepository() {
         try {
+            // jdbc:postgresql://localhost:5432/banco
             this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/banco", "root", "root");
         } catch (SQLException e) {
             throw new RuntimeException(e);
