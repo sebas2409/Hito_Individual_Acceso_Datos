@@ -1,5 +1,6 @@
 package com.practica.hitoindividualaccesodatos.application;
 
+import com.opencsv.bean.CsvToBeanBuilder;
 import com.practica.hitoindividualaccesodatos.domain.Transaction;
 import com.practica.hitoindividualaccesodatos.service.dto.*;
 import com.practica.hitoindividualaccesodatos.domain.Account;
@@ -8,9 +9,14 @@ import com.practica.hitoindividualaccesodatos.util.AccountMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -54,13 +60,14 @@ public class BankController {
     }
 
 
-    @GetMapping("accounts-mysql")
+    @GetMapping("accounts")
+    @CrossOrigin
     public void getCsvMysqlAccounts(HttpServletResponse response) {
         bankServices.getCsvAccounts(bankServices.getAllMysqlAccounts(), response, "mysql");
     }
 
 
-    @GetMapping("transactions-mysql")
+    @GetMapping("transactions")
     public void getCsvMysqlTransactions(HttpServletResponse response) {
         bankServices.getCsvTransacctions(bankServices.getAllMysqlTransactions(), response, "mysql");
     }
@@ -88,6 +95,39 @@ public class BankController {
     public ResponseEntity<ArrayList<Transaction>> getAllTransaction(@PathVariable String id) {
         var rs = bankServices.getTransactionsById(id);
         return new ResponseEntity<>(rs, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("uploadaccount")
+    public void uploadCsv(@RequestParam("file") MultipartFile multipartFile) {
+
+        try {
+            var reader = new BufferedReader(new InputStreamReader(multipartFile.getInputStream()));
+            var csvToBean = new CsvToBeanBuilder<>(reader)
+                    .withType(AccountCsv.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+            List<Object> listaCsv = csvToBean.parse();
+            System.out.println(listaCsv);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("uploadtransaction")
+    public void uploadTransactionCsv(@RequestParam("file") MultipartFile file){
+        try {
+            var reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+            var csvToBean = new CsvToBeanBuilder<>(reader)
+                    .withType(TransaccionCsv.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+
+            List<Object> listaCsv = csvToBean.parse();
+            System.out.println(listaCsv);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

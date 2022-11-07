@@ -4,6 +4,7 @@ use banco;
 create table cuenta(
                        id varchar(50) primary key,
                        nombre varchar(50),
+                       dni varchar(50),
                        cc varchar(100),
                        balance double,
                        fechaCreacion varchar(50)
@@ -23,6 +24,8 @@ create database banco;
 create table cuenta(
                        id varchar(50) primary key,
                        nombre varchar(50),
+                       dni varchar(50),
+                       cc varchar(50),
                        balance decimal,
                        fechaCreacion varchar(50)
 );
